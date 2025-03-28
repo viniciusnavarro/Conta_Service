@@ -5,22 +5,27 @@ import com.example.Conta_Service_2025.dto.ContaRequestDTO;
 import com.example.Conta_Service_2025.dto.ContaResponseDTO;
 import com.example.Conta_Service_2025.exception.ContaExistenteException;
 import com.example.Conta_Service_2025.exception.ContaNaoExistenteException;
+import com.example.Conta_Service_2025.feign.BacenService;
 import com.example.Conta_Service_2025.model.Conta;
 import com.example.Conta_Service_2025.repository.ContaRepository;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
 
 @Service
 @RequiredArgsConstructor
 @Slf4j
 public class ContaService {
     private final ContaRepository contaRepository;
+    private final BacenService bacenService;
 
+    @Transactional
     public ContaResponseDTO criarConta(ContaRequestDTO contaRequestDTO){
         Optional<Conta> contaOptional = contaRepository.findByNomeTitularAndNumeroContaAndChavePix(
             contaRequestDTO.getNomeTitular(),
@@ -41,6 +46,8 @@ public class ContaService {
             .build();
 
         Conta contaSalva = contaRepository.save(conta);
+
+        bacenService.criarChave(contaSalva.getChavePix());
 
         ContaResponseDTO contaResponseDTO = ContaResponseDTO.builder()
             .id(contaSalva.getId())
