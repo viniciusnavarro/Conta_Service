@@ -9,7 +9,7 @@ primary_region = 'gig'
 [build]
 
 [http_service]
-  internal_port = 9000
+  internal_port = 8080
   force_https = false
   auto_stop_machines = 'stop'
   auto_start_machines = true
