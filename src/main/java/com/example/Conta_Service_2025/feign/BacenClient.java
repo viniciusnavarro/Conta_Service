@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 @FeignClient(
         contextId = "BacenClient",
         name = "Bacen",
-        url = "http://bootcamp-2025-bacen-service.fly.dev/api/bacen"
+        url = "https://bootcamp-2025-bacen-service.fly.dev/api/bacen"
 )
 public interface BacenClient {
 
